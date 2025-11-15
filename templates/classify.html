@@ -14,8 +14,7 @@
                 <form id="moodForm">
                     <div class="mb-3">
                         <label for="user_text" class="form-label">Ceritakan suasana hatimu...</label>
-                        <textarea id="user_text" name="user_text"
-                            placeholder="Contoh: Aku merasa sedikit cemas hari ini..." required></textarea>
+                        <textarea id="user_text" name="user_text" placeholder="Contoh: Aku merasa sedikit cemas hari ini..." required></textarea>
                     </div>
                     <div class="d-grid">
                         <button type="submit" class="btn-analyze">
@@ -55,70 +54,70 @@
 {% block extra_js %}
 <script>
 
-    // =============== SAVE HISTORY FUNCTION ===============
-    function saveHistory(item) {
-        let history = localStorage.getItem("podmatch_history");
-        history = history ? JSON.parse(history) : [];
-        history.unshift(item);
-        localStorage.setItem("podmatch_history", JSON.stringify(history));
-    }
+// =============== SAVE HISTORY FUNCTION ===============
+function saveHistory(item) {
+    let history = localStorage.getItem("podmatch_history");
+    history = history ? JSON.parse(history) : [];
+    history.unshift(item);
+    localStorage.setItem("podmatch_history", JSON.stringify(history));
+}
 
-    // =====================================================
+// =====================================================
 
-    $(document).ready(function () {
-        const form = $('#moodForm');
-        const loadingContainer = $('#loadingContainer');
-        const resultContainer = $('#resultContainer');
-        const moodResult = $('#moodResult');
-        const moodText = $('#moodText');
-        const moodDescription = $('#moodDescription');
-        const podcastList = $('#podcastList');
+$(document).ready(function() {
+    const form = $('#moodForm');
+    const loadingContainer = $('#loadingContainer');
+    const resultContainer = $('#resultContainer');
+    const moodResult = $('#moodResult');
+    const moodText = $('#moodText');
+    const moodDescription = $('#moodDescription');
+    const podcastList = $('#podcastList');
 
-        form.on('submit', function (e) {
-            e.preventDefault();
+    form.on('submit', function(e) {
+        e.preventDefault();
 
-            const text = $('#user_text').val();
+        const text = $('#user_text').val();
 
-            loadingContainer.show();
-            resultContainer.hide();
+        loadingContainer.show();
+        resultContainer.hide();
 
-            $.ajax({
-                url: '{{ url_for("analyze_mood") }}',
-                type: 'POST',
-                data: { user_text: text },
-                success: function (response) {
-                    loadingContainer.hide();
+        $.ajax({
+            url: '{{ url_for("analyze_mood") }}',
+            type: 'POST',
+            data: { user_text: text },
+            success: function(response) {
+                loadingContainer.hide();
 
-                    if (response.success) {
-                        resultContainer.show();
+                if(response.success) {
+                    resultContainer.show();
 
-                        // ================= SET MOOD RESULT ==================
-                        let moodEmoji = '😐';
-                        if (response.mood === 'Marah') moodEmoji = '😡';
-                        else if (response.mood === 'Takut') moodEmoji = '😨';
-                        else if (response.mood === 'Senang') moodEmoji = '😄';
-                        else if (response.mood === 'Kasih') moodEmoji = '💖';
-                        else if (response.mood === 'Sedih') moodEmoji = '😢';
+                    // ================= SET MOOD RESULT ==================
+                    let moodEmoji = '😐';
+                    if(response.mood === 'Marah') moodEmoji = '😡';
+                    else if(response.mood === 'Takut') moodEmoji = '😨';
+                    else if(response.mood === 'Senang') moodEmoji = '😄';
+                    else if(response.mood === 'Kasih') moodEmoji = '💖';
+                    else if(response.mood === 'Sedih') moodEmoji = '😢';
 
-                        moodText.html(`${response.mood} ${moodEmoji}`);
-                        moodDescription.html(response.description);
+                    moodText.html(`${response.mood} ${moodEmoji}`);
+                    moodDescription.html(response.description);
 
-                        moodResult.removeClass("mood-anger mood-fear mood-happy mood-love mood-sad mood-neutral");
-                        if (response.mood === 'Marah') moodResult.addClass("mood-anger");
-                        else if (response.mood === 'Takut') moodResult.addClass("mood-fear");
-                        else if (response.mood === 'Senang') moodResult.addClass("mood-happy");
-                        else if (response.mood === 'Kasih') moodResult.addClass("mood-love");
-                        else if (response.mood === 'Sedih') moodResult.addClass("mood-sad");
-                        else moodResult.addClass("mood-neutral");
-                        // ====================================================
+                    moodResult.removeClass("mood-anger mood-fear mood-happy mood-love mood-sad mood-neutral");
+                    if(response.mood === 'Marah') moodResult.addClass("mood-anger");
+                    else if(response.mood === 'Takut') moodResult.addClass("mood-fear");
+                    else if(response.mood === 'Senang') moodResult.addClass("mood-happy");
+                    else if(response.mood === 'Kasih') moodResult.addClass("mood-love");
+                    else if(response.mood === 'Sedih') moodResult.addClass("mood-sad");
+                    else moodResult.addClass("mood-neutral");
+                    // ====================================================
 
-                        podcastList.empty();
+                    podcastList.empty();
 
-                        if (response.videos.length > 0) {
-                            response.videos.forEach(video => {
-                                const date = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    if (response.videos.length > 0) {
+                        response.videos.forEach(video => {
+                            const date = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-                                const card = `
+                            const card = `
                                 <a href="${video.url}" target="_blank" class="podcast-card">
                                     <figure class="card-banner">
                                         <img src="${video.thumbnail}" alt="${video.title}">
@@ -135,24 +134,24 @@
                                     </div>
                                 </a>
                             `;
-                                podcastList.append(card);
-                            });
+                            podcastList.append(card);
+                        });
 
-                            // *************** SAVE TO HISTORY HERE ***************
-                            saveHistory({
-                                text: text,
-                                mood: response.mood,
-                                date: new Date().toLocaleDateString(),
-                                video_url: response.videos[0].url,
-                                video_title: response.videos[0].title,
-                                video_thumbnail: response.videos[0].thumbnail
-                            });
-                            // ********************************************************
-                        }
+                        // *************** SAVE TO HISTORY HERE ***************
+                        saveHistory({
+                            text: text,
+                            mood: response.mood,
+                            date: new Date().toLocaleDateString(),
+                            video_url: response.videos[0].url,
+                            video_title: response.videos[0].title,
+                            video_thumbnail: response.videos[0].thumbnail
+                        });
+                        // ********************************************************
                     }
                 }
-            });
+            }
         });
     });
+});
 </script>
 {% endblock %}

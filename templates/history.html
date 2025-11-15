@@ -3,8 +3,18 @@
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="text-white mb-4 fw-bold history-title">Riwayat Podcast Kamu</h1>
-    <p class="mb-4">Semua hasil analisis mood yang pernah kamu lakukan akan muncul di sini.</p>
+
+    <!-- HEADER + CLEAR BUTTON -->
+    <div class="d-flex justify-content-between align-items-end mb-2">
+        <div>
+            <h1 class="text-white fw-bold history-title mb-4">Riwayat Podcast Kamu</h1>
+            <p class="text-light">Semua hasil analisis mood yang pernah kamu lakukan akan muncul di sini.</p>
+        </div>
+
+        <button class="btn btn-danger clear-history-btn" onclick="confirmClear()">
+            <ion-icon name="trash-outline"></ion-icon> Hapus Riwayat
+        </button>
+    </div>
 
     <div class="row g-4" id="historyContainer">
         <!-- Data dari JavaScript -->
@@ -12,6 +22,38 @@
 </div>
 
 <script>
+
+    /* ========== POPUP KONFIRMASI CLEAR HISTORY ========== */
+    function confirmClear() {
+        const confirmBox = document.createElement("div");
+        confirmBox.className = "confirm-overlay fade-in";
+        confirmBox.innerHTML = `
+            <div class="confirm-box premium-popup scale-in">
+                <h3 class="fw-bold mb-2">Hapus Semua Riwayat?</h3>
+                <p class="text-light mb-3">Aksi ini tidak dapat dibatalkan. Yakin ingin melanjutkan?</p>
+
+                <div class="popup-buttons">
+                    <button class="btn btn-outline-light btn-sm" id="cancelClear">Batal</button>
+                    <button class="btn btn-danger btn-sm" id="doClear">Hapus</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(confirmBox);
+
+        document.getElementById("cancelClear").onclick = () => {
+            confirmBox.classList.remove("fade-in");
+            confirmBox.classList.add("fade-out");
+            setTimeout(() => confirmBox.remove(), 200);
+        };
+
+        document.getElementById("doClear").onclick = () => {
+            localStorage.removeItem("podmatch_history");
+            confirmBox.remove();
+            location.reload();
+        };
+    }
+
+    /* ========== LOAD HISTORY ========== */
     function loadHistory() {
         const container = document.getElementById("historyContainer");
 
@@ -69,5 +111,4 @@
 
     loadHistory();
 </script>
-
 {% endblock %}
