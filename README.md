@@ -47,6 +47,7 @@ PodMatch dibuat untuk membantu pengguna menemukan konten audio yang sesuai denga
 - **JavaScript (Frontend Logic)**
 - **Flask / Python Backend**
 - **LocalStorage** untuk menyimpan riwayat mood
+- **Youtube API v3**
 - **YouTube Podcast Embedding** melalui link dan thumbnail
 
 ---
