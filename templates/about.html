@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Tentang - PodMatch{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="about-container">
+        <div class="about-section">
+            <div class="about-card">
+                <!-- Foto Profil -->
+                <div class="about-image">
+                    <img src="{{ url_for('static', filename='assets/andika.jpg') }}" alt="Foto Pembuat">
+                </div>
+
+                <div class="about-text">
+                    <!-- Judul -->
+                    <h1 class="about-title">Tentang <span>PodMatch</span></h1>
+
+                    <!-- Deskripsi -->
+                    <p class="about-desc">
+                        <strong>PodMatch</strong> adalah aplikasi web yang menggunakan analisis sentimen Bahasa
+                        Indonesia
+                        untuk mendeteksi suasana hati pengguna, kemudian merekomendasikan podcast YouTube berbahasa
+                        Indonesia
+                        yang relevan untuk membantu memperbaiki mood mereka.
+                    </p>
+                    <p class="about-desc">
+                        Aplikasi ini dikembangkan sebagai proyek akhir praktikum mata kuliah
+                        <strong>Aplikasi Web</strong>.
+                    </p>
+
+                    <hr>
+
+                    <!-- Identitas Pembuat -->
+                    <div class="creator">
+                        <h2>Dibuat oleh</h2>
+                        <p class="creator-name">Muhammad Andika Pratama</p>
+                        <p class="creator-name">NIM: 23051130002</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

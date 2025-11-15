@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PodMatch{% endblock %}</title>
+
+    <!-- 
+    - favicon link
+  -->
+    <link rel="shortcut icon" href="" type="image/svg+xml">
+
+    <!-- 
+    - custom css link
+  -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- 
+    - google font link
+  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome untuk ikon (opsional, jika ingin tetap menggunakan di tempat lain) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body id="top">
+
+
+    <!-- 
+    - #HEADER
+  -->
+
+    <header class="active" data-header>
+        <div class="container">
+
+            <!-- 
+        - overlay
+      -->
+            <div class="overlay" data-overlay></div>
+
+            <a href="{{ url_for('index') }}" class="logo">
+                <img src="{{ url_for('static', filename='assets/logonew1.png') }}" alt="PodMatch Logo"
+                    style="height: 40px;">
+            </a>
+
+            <button class="nav-toggle-btn" data-nav-toggle-btn>
+                <ion-icon name="menu-outline"></ion-icon>
+            </button>
+
+            <nav class="navbar" data-navbar>
+                <ul class="navbar-list">
+
+                    <li class="navbar-item">
+                        <a href="{{ url_for('index') }}"
+                            class="navbar-link {% if request.endpoint == 'about' %}active{% endif %}">Beranda</a>
+                    </li>
+
+                    <li class="navbar-item">
+                        <a href="{{ url_for('classify_page') }}"
+                            class="navbar-link {% if request.endpoint == 'about' %}active{% endif %}">Klasifikasi Mood</a>
+                    </li>
+
+                    <li class="navbar-item">
+                        <a href="{{ url_for('about') }}"
+                            class="navbar-link {% if request.endpoint == 'about' %}active{% endif %}">Tentang</a>
+                    </li>
+
+                </ul>
+
+                <div class="navbar-actions">
+
+                    <button class="navbar-btn">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </button>
+
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Konten Halaman -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- 
+    - #FOOTER
+    -->
+
+    <footer>
+
+        <div class="footer-top">
+            <div class="container">
+
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <img src="#" alt="Micro logo">
+                    </a>
+
+                    <p class="footer-text">
+                        Lorem ipsum dolor sit amet consectetur adipiscing elit tincidunt in felis malesuada mollis purus
+                        id sit in
+                        aliquet
+                        lectus eget morbi dui felis malesuada.
+                    </p>
+                </div>
+
+                <ul class="footer-list">
+
+                    <li>
+                        <p class="footer-link-title">Contact Me</p>
+                    </li>
+
+                    <li>
+                        <a href="mailto:hello@micro.com" class="footer-link">hello@micro.com</a>
+                    </li>
+
+                    <li>
+                        <a href="tel:+0123454678" class="footer-link">+01234 54678</a>
+                    </li>
+
+                    <li>
+                        <a href="tel:+15780346789" class="footer-link">+1 (578) 034-6789</a>
+                    </li>
+
+                </ul>
+
+                <div class="social-list-box">
+
+                    <p class="social-title">Follow Me On:</p>
+
+                    <ul class="social-list">
+
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-instagram"></ion-icon>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <p class="copyright">
+                    &copy; 2025 PodMatch <a href="#">Dibuat Oleh Muhammad Andika Pratama</a>. All Rights Reserved
+                </p>
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- Bootstrap JS (tidak digunakan untuk navbar, tapi mungkin untuk komponen lain) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery (untuk AJAX di halaman classify) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Ionicons untuk ikon navbar -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <!-- 
+    - custom js link
+    -->
+    <script src="./assets/js/script.js"></script>
+    <!-- Custom JS untuk navbar dan header sticky -->
+    <script>
+        'use strict';
+
+        /**
+         * element toggle function
+         */
+        const elemToggleFunc = function (elem) { elem.classList.toggle("active"); }
+
+        /**
+         * navbar variables
+         */
+        const navbar = document.querySelector("[data-navbar]");
+        const navToggleBtn = document.querySelector("[data-nav-toggle-btn]");
+        const overlay = document.querySelector("[data-overlay]");
+
+        const navElemArr = [navToggleBtn, overlay];
+
+        for (let i = 0; i < navElemArr.length; i++) {
+            navElemArr[i].addEventListener("click", function () {
+                elemToggleFunc(navbar);
+                elemToggleFunc(overlay);
+            });
+        }
+
+        /**
+         * header sticky
+         */
+        const header = document.querySelector("[data-header]");
+
+        let lastScrollPosition = 0;
+
+        window.addEventListener("scroll", function () {
+            let scrollPosition = window.pageYOffset;
+
+            if (scrollPosition > lastScrollPosition) {
+                header.classList.remove("active");
+            } else {
+                header.classList.add("active");
+            }
+
+            lastScrollPosition = scrollPosition <= 0 ? 0 : scrollPosition;
+        });
+
+        /**
+         * go top (opsional, bisa ditambahkan nanti)
+         */
+        // const goTopBtn = document.querySelector("[data-go-top]");
+        // window.addEventListener("scroll", function () {
+        //     window.scrollY >= 200 ? goTopBtn.classList.add("active") : goTopBtn.classList.remove("active");
+        // });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

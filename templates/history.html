@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Riwayat Mood - PodMatch{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="text-white mb-4 fw-bold history-title">Riwayat Analisis Mood</h1>
+    <p class="mb-4">Semua hasil analisis mood yang pernah kamu lakukan akan muncul di sini.</p>
+
+    <div class="row g-4" id="historyContainer">
+        <!-- Data dari JavaScript -->
+    </div>
+</div>
+
+<script>
+    function loadHistory() {
+        const container = document.getElementById("historyContainer");
+
+        let history = localStorage.getItem("podmatch_history");
+        if (!history) {
+            container.innerHTML = `<p class="text-white">Belum ada riwayat.</p>`;
+            return;
+        }
+
+        history = JSON.parse(history);
+
+        if(history.length === 0){
+            container.innerHTML = `<p class="text-white">Belum ada riwayat.</p>`;
+            return;
+        }
+
+        history.forEach(item => {
+            const moodClass =
+                item.mood === "Senang" ? "mood-happy" :
+                item.mood === "Sedih" ? "mood-sad" :
+                item.mood === "Marah" ? "mood-anger" :
+                item.mood === "Takut" ? "mood-fear" :
+                item.mood === "Kasih" ? "mood-love" : "mood-neutral";
+
+            container.innerHTML += `
+                <div class="col-md-6 col-lg-4">
+                    <div class="history-card">
+
+                        <div class="thumbnail-box">
+                            <a href="${item.video_url}" target="_blank">
+                                <img src="${item.video_thumbnail}" class="thumbnail-img">
+                                <div class="play-btn">
+                                    <ion-icon name="play"></ion-icon>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-3 text-light small">
+                            <span>${item.date}</span>
+
+                            <span class="badge ${moodClass}">
+                                ${item.mood}
+                            </span>
+                        </div>
+
+                        <h5 class="mt-2 text-white">${item.video_title}</h5>
+
+                        <p class="user-text mt-2">"${item.text}"</p>
+
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    loadHistory();
+</script>
+
+{% endblock %}

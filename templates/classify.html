@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Klasifikasi Mood - PodMatch{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="classify-wrapper">
+            <!-- Form untuk Analisis Mood -->
+            <div class="classify-input">
+                <h2>🎧 Rekomendasi Podcast Sesuai Mood Kamu</h2>
+                <p class="desc">Masukkan kata atau kalimat yang menggambarkan suasana hatimu.</p>
+
+                <form id="moodForm">
+                    <div class="mb-3">
+                        <label for="user_text" class="form-label">Ceritakan suasana hatimu...</label>
+                        <textarea id="user_text" name="user_text" placeholder="Contoh: Aku merasa sedikit cemas hari ini..." required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn-analyze">
+                            <ion-icon name="pulse-outline"></ion-icon> Analisis Mood
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingContainer" class="loading-container text-center my-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Sedang menganalisis...</span>
+                </div>
+                <p class="mt-2">Sedang menganalisis suasana hatimu...</p>
+            </div>
+
+            <!-- Result Container -->
+            <div id="resultContainer" class="result-container my-5">
+                <div id="moodResult" class="alert p-4 mb-4">
+                    <h4 class="text-white">Mood Kamu:</h4>
+                    <h2 id="moodText" class="text-center mood-display"></h2>
+                    <p id="moodDescription"></p>
+                </div>
+
+                <!-- Daftar Podcast (Catalog) -->
+                <h2 class="mb-4">Rekomendasi Podcast</h2>
+                <div id="podcastList" class="podcast-list">
+                    <!-- Podcast cards akan ditambahkan di sini oleh JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+
+// =============== SAVE HISTORY FUNCTION ===============
+function saveHistory(item) {
+    let history = localStorage.getItem("podmatch_history");
+    history = history ? JSON.parse(history) : [];
+    history.unshift(item);
+    localStorage.setItem("podmatch_history", JSON.stringify(history));
+}
+
+// =====================================================
+
+$(document).ready(function() {
+    const form = $('#moodForm');
+    const loadingContainer = $('#loadingContainer');
+    const resultContainer = $('#resultContainer');
+    const moodResult = $('#moodResult');
+    const moodText = $('#moodText');
+    const moodDescription = $('#moodDescription');
+    const podcastList = $('#podcastList');
+
+    form.on('submit', function(e) {
+        e.preventDefault();
+
+        const text = $('#user_text').val();
+
+        loadingContainer.show();
+        resultContainer.hide();
+
+        $.ajax({
+            url: '{{ url_for("analyze_mood") }}',
+            type: 'POST',
+            data: { user_text: text },
+            success: function(response) {
+                loadingContainer.hide();
+
+                if(response.success) {
+                    resultContainer.show();
+
+                    // ================= SET MOOD RESULT ==================
+                    let moodEmoji = '😐';
+                    if(response.mood === 'Marah') moodEmoji = '😡';
+                    else if(response.mood === 'Takut') moodEmoji = '😨';
+                    else if(response.mood === 'Senang') moodEmoji = '😄';
+                    else if(response.mood === 'Kasih') moodEmoji = '💖';
+                    else if(response.mood === 'Sedih') moodEmoji = '😢';
+
+                    moodText.html(`${response.mood} ${moodEmoji}`);
+                    moodDescription.html(response.description);
+
+                    moodResult.removeClass("mood-anger mood-fear mood-happy mood-love mood-sad mood-neutral");
+                    if(response.mood === 'Marah') moodResult.addClass("mood-anger");
+                    else if(response.mood === 'Takut') moodResult.addClass("mood-fear");
+                    else if(response.mood === 'Senang') moodResult.addClass("mood-happy");
+                    else if(response.mood === 'Kasih') moodResult.addClass("mood-love");
+                    else if(response.mood === 'Sedih') moodResult.addClass("mood-sad");
+                    else moodResult.addClass("mood-neutral");
+                    // ====================================================
+
+                    podcastList.empty();
+
+                    if (response.videos.length > 0) {
+                        response.videos.forEach(video => {
+                            const date = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+                            const card = `
+                                <a href="${video.url}" target="_blank" class="podcast-card">
+                                    <figure class="card-banner">
+                                        <img src="${video.thumbnail}" alt="${video.title}">
+                                        <div class="card-banner-icon">
+                                            <ion-icon name="play"></ion-icon>
+                                        </div>
+                                    </figure>
+                                    <div class="card-content">
+                                        <div class="card-meta">
+                                            <time>${date}</time>
+                                            <p class="pod-epi">Episodes: 01</p>
+                                        </div>
+                                        <h3 class="h3 card-title">${video.title}</h3>
+                                    </div>
+                                </a>
+                            `;
+                            podcastList.append(card);
+                        });
+
+                        // *************** SAVE TO HISTORY HERE ***************
+                        saveHistory({
+                            text: text,
+                            mood: response.mood,
+                            date: new Date().toLocaleDateString(),
+                            video_url: response.videos[0].url,
+                            video_title: response.videos[0].title,
+                            video_thumbnail: response.videos[0].thumbnail
+                        });
+                        // ********************************************************
+                    }
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

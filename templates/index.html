@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Beranda - PodMatch{% endblock %}
+
+{% block content %}
+<div class="hero-video-section">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="hero-video-bg">
+        <source src="{{ url_for('static', filename='assets/vidhome.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Kolom Kiri: Teks dan Tombol -->
+            <div class="col-lg-6">
+                <div class="hero-content text-start">
+                    <h1>
+                        Setiap Suara Punya Cerita — Temukan Podcast Sesuai Moodmu</h1>
+                    <span>Mood kamu menentukan suara yang kamu dengar kapan pun, di mana pun.</span>
+                    <a href="{{ url_for('classify_page') }}" class="btn-hero">
+                        <span>Temukan Podcastmu Sekarang!</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Kolom Kanan: Video Background (tidak perlu diubah) -->
+            <div class="col-lg-6">
+                <!-- Video sudah ada di hero-video-bg -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bagian Features -->
+<div class="features-section py-5">
+    <div class="container">
+        <h1 class="text-center mb-5">Cara Kerja PodMatch</h1>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                        <ion-icon name="chatbubbles-outline" style="font-size: 3rem; color: var(--flourescent-blue); margin-bottom: 1rem;"></ion-icon>
+                        <h4 class="mb-3">Ceritakan Mood-mu</h4>
+                        <p class="text-center">Tulis perasaan atau suasana hatimu dalam beberapa kata.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                        <ion-icon name="analytics" style="font-size: 3rem; color: var(--flourescent-blue); margin-bottom: 1rem;"></ion-icon>
+                        <h4 class="mb-3">Menganalisis Mood-mu dengan model prediksi</h4>
+                        <p class="text-center">Model prediksi buatan kami akan menganalisis teksmu untuk menentukan mood.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 feature-card">
+                    <div class="card-body text-center d-flex flex-column justify-content-center align-items-center">
+                        <ion-icon name="headset-outline" style="font-size: 3rem; color: var(--flourescent-blue); margin-bottom: 1rem;"></ion-icon>
+                        <h4 class="mb-3">Dengarkan Podcast</h4>
+                        <p class="text-center">Dapatkan rekomendasi podcast yang sesuai dengan mood-mu.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
