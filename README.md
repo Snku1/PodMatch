@@ -51,9 +51,31 @@ PodMatch dibuat untuk membantu pengguna menemukan konten audio yang sesuai denga
 
 ---
 
-## 📥 Instalasi & Menjalankan Proyek
+## 📥 Instalasi & Cara Menjalankan
 
 ### 1. Clone repository
 ```bash
 git clone https://github.com/username/podmatch.git
+```
+```bash
 cd podmatch
+```
+
+### 2. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Jalankan aplikasi
+```bash
+flask run
+```
+atau
+```bash
+python app.py
+```
+
+### 4. Akses di browser
+```bash
+http://127.0.0.1:5000/
+```
