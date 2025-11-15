@@ -5,8 +5,7 @@
 ![Flask](https://img.shields.io/badge/Flask-2.3.3-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-PodMatch adalah aplikasi web berbasis Flask yang dapat **menganalisis mood pengguna berdasarkan teks** dan memberikan **rekomendasi podcast** yang sesuai dengan mood tersebut.  
-Riwayat pencarian juga disimpan secara lokal, sehingga pengguna dapat melihat kembali hasil mood & rekomendasi podcast sebelumnya.
+PodMatch adalah aplikasi web berbasis Flask yang dapat **menganalisis mood pengguna berdasarkan teks** dan memberikan **rekomendasi podcast** yang sesuai dengan mood tersebut. Riwayat pencarian juga disimpan secara lokal, sehingga pengguna dapat melihat kembali hasil mood & rekomendasi podcast sebelumnya.
 
 PodMatch dibuat untuk membantu pengguna menemukan konten audio yang sesuai dengan emosi mereka supaya dapat membantu memperbaiki mood mereka secara cepat dan akurat.
 
