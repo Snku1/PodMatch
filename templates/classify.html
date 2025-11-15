@@ -143,9 +143,9 @@
                                 text: text,
                                 mood: response.mood,
                                 date: new Date().toLocaleDateString(),
-                                video_url: video.url,
-                                video_title: video.title,
-                                video_thumbnail: video.thumbnail
+                                video_url: response.videos[0].url,
+                                video_title: response.videos[0].title,
+                                video_thumbnail: response.videos[0].thumbnail
                             });
                             // ********************************************************
                         }
