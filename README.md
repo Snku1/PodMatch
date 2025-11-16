@@ -56,7 +56,7 @@ PodMatch dibuat untuk membantu pengguna menemukan konten audio yang sesuai denga
 
 ### 1. Clone repository
 ```bash
-git clone https://github.com/username/podmatch.git
+git clone https://github.com/Snku1/podmatch.git
 ```
 ```bash
 cd podmatch
