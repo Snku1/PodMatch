@@ -184,13 +184,19 @@ header .container {
   border-radius: 4px;
 }
 
-.nav-toggle-btn ion-icon { --ionicon-stroke-width: 40px; }
+.nav-toggle-btn ion-icon { 
+  --ionicon-stroke-width: 40px; 
+  transition: transform .3s ease;
+}
+
+.navbar.active ~ .nav-toggle-btn ion-icon {
+  transform: rotate(180deg);
+}
 
 .navbar {
   position: fixed;
-  bottom: -270px;
-  right: 140px;
-  left: auto;
+  top: 67px;
+  right: 20px;
   width: max-content;
   background: rgba(0, 0, 0, 0.3);
   border-radius: 8px 8px 0 0;
@@ -201,7 +207,7 @@ header .container {
 }
 
 .navbar.active {
-  bottom: -160px;
+  bottom: -202px;
   visibility: visible;
   transition: 0.25s ease-out;
 }

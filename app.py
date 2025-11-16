@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify
 import joblib
 import requests
 import os # Untuk memeriksa keberadaan file model
+import random
 
 app = Flask(__name__)
 
@@ -27,23 +28,23 @@ mood_description = {
     "Senang": "Kamu sedang bahagia dan bersemangat! Dengarkan podcast motivasi atau hiburan untuk mempertahankan energi positifmu.",
     "Kasih": "Kamu sedang penuh kasih dan empati. Podcast bertema hubungan, keluarga, atau kisah inspiratif cocok untuk memperkuat perasaanmu.",
     "Netral": "Kamu sedang dalam keadaan stabil dan tenang. Podcast ringan dan hiburan bisa menjadi teman yang pas untuk menemanimu.",
-    "Sedih": "Kamu sedang merasa sedih atau kecewa. Dengarkan podcast penyemangat atau kisah inspiratif agar suasana hatimu membaik."
+    "Sedih": "Kamu sedang merasa sedih atau kecewa. Dengarkan podcast penyemangat atau hiburan agar suasana hatimu membaik."
 }
 
 # --- Pemetaan mood ke query YouTube (podcast Indonesia) ---
 mood_to_query = {
     "Marah": "podcast buat yang lagi marah",
     "Takut": "podcast untuk yang ketakutan",
-    "Senang": "podcast hiburan",
+    "Senang": "podcast kocak dan lucu",
     "Kasih": "podcast cinta dan hubungan indonesia",
     "Netral": "podcast lucu dan menghibur",
     "Sedih": "podcast inspirasi hidup dan komedi indonesia"
 }
 
 # --- Fungsi ambil video YouTube ---
-def get_youtube_videos(query, max_results=4):
+def get_youtube_videos(query, max_results=6):
     """Gunakan YouTube Data API (ganti API_KEY dengan milikmu)."""
-    API_KEY = "AIzaSyB1I-XeS1xwv4TznDXKMmD-qnOn2asXypI" # Ganti dengan API_KEY yang aman
+    API_KEY = "AIzaSyAExjvMoFco2uaAwugCJ573oSlQ7l6GKPE" # Ganti dengan API_KEY yang aman
     search_url = "https://www.googleapis.com/youtube/v3/search"
 
     params = {
@@ -72,6 +73,11 @@ def get_youtube_videos(query, max_results=4):
                 "embed": f"https://www.youtube.com/embed/{video_id}",
                 "thumbnail": thumbnail
             })
+
+        # RANDOM sesuai max_results
+        if len(videos) > max_results:
+            videos = random.sample(videos, max_results)
+
         return videos
     except requests.exceptions.RequestException as e:
         print(f"Error saat mengambil video dari YouTube: {e}")
@@ -109,7 +115,7 @@ def analyze_mood():
     query = mood_to_query.get(mood, "podcast indonesia")
 
     # Ambil video dari YouTube
-    videos = get_youtube_videos(query)
+    videos = get_youtube_videos(query, max_results=4)
 
     # Kirim data mood, deskripsi, dan video ke frontend
     return jsonify({

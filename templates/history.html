@@ -61,7 +61,7 @@
         let history = localStorage.getItem("podmatch_history");
 
         if (!history || JSON.parse(history).length === 0) {
-            container.innerHTML = `<p class="text-white">Belum ada riwayat.</p>`;
+            container.innerHTML = `<p class="text-white">Belum ada riwayat. Silakan buka menu 'Klasifikasi Mood' untuk memulai!</p>`;
             clearBtn.style.display = "none";  // sembunyikan tombol
             return;
         }
